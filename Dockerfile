@@ -1,9 +1,8 @@
-FROM node:14.16-alpine
+FROM node:18-alpine
 
-RUN yarn global add nodemon
-WORKDIR /src
+WORKDIR /
 ADD package*.json ./
-RUN yarn install
+RUN npm install
 COPY . .
 
-CMD ["npm", "run", "dev"]
+CMD ["npm", "run", "start"]

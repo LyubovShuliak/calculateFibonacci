@@ -1,10 +1,12 @@
 version: "3.7"
 services:
   redis:
-    image: redis:6.2-alpine
+    image: redis:7.0.4-alpine
     container_name: redis
     restart: unless-stopped
-    network_mode: bridge
+
+    ports:
+      - 6379:6379
     expose:
       - 6379
 
@@ -12,15 +14,6 @@ services:
     build: .
     container_name: api
     restart: unless-stopped
-    network_mode: bridge
-    command: /bin/sh -c 'nodemon -e js,html index.js'
+
     ports:
-      - 3040:3040
-    volumes:
-      - .:/src
-      - /src/node_modules
-    # environment:
-    #   NODE_ENV: dev
-    #   REDIS_URL: redis://cache
-    links:
-      - redis
+      - "3040:3040"

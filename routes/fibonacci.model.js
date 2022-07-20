@@ -1,8 +1,4 @@
-const fs = require("fs");
-const util = require("util");
-
-const readFile = util.promisify(fs.readFile);
-const writeFile = util.promisify(fs.writeFile);
+const { setFibonacci, getFibonacciFromRedis } = require("../redis.service");
 
 const path = require("path");
 function fib(n = 1000) {
@@ -16,33 +12,14 @@ function fib(n = 1000) {
   return b.toString();
 }
 
-async function getData() {
-  const data = await readFile(
-    path.join(__dirname, "fibonacciList.json"),
-    "utf8"
-  );
-  if (!data) return {};
-  return JSON.parse(data);
-}
-
 async function putFibonacci(ticket, index) {
-  let tickets = await getData();
-
-  console.log(fib(index));
-
-  const newAssign = Object.assign(tickets, { [ticket]: fib(index) });
-
-  writeFile(
-    path.join(__dirname, "fibonacciList.json"),
-    JSON.stringify(newAssign)
-  );
+  await setFibonacci(ticket, fib(index));
   return { ticket };
 }
 
 async function getFibonacci(ticket) {
-  let tickets = await getData();
-
-  const fibonacci = tickets[ticket];
+  const fibonacci = await getFibonacciFromRedis(ticket);
+  console.log("fib", fibonacci);
 
   if (!fibonacci) {
     return { error: "not found" };
