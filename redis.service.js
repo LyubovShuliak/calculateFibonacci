@@ -5,7 +5,7 @@ const client = createClient({
 });
 
 const setFibonacci = async (ticket, fibonacci) => {
-  await client.hSet("numbers", ticket, fibonacci);
+  return await client.hSet("numbers", ticket, fibonacci);
 };
 
 const getFibonacciFromRedis = async (ticket) => {

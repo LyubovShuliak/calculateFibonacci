@@ -13,7 +13,7 @@ services:
   api:
     build: .
     container_name: api
-    restart: unless-stopped
+    restart: always
 
     ports:
       - "3040:3040"

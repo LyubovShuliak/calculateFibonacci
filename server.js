@@ -1,9 +1,10 @@
 const express = require("express");
-const { client } = require("./redis.service");
+
 var os = require("os");
 const bodyParser = require("body-parser");
+const responseTime = require("response-time");
 const { router } = require("./routes/fibonacci.router");
-
+const { client } = require("./redis.service");
 client.connect();
 client.on("error", (err) => console.log("Redis Client Error", err));
 client.on("connect", async () => {
@@ -19,6 +20,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(express.json());
+app.use(responseTime());
 
 app.use("/", router);
 app.get("/*", (req, res) => {
